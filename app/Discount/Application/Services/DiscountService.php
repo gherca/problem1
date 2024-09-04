@@ -7,6 +7,7 @@ use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Application\DTO\RequestOrderDiscountItemData;
 use App\Discount\Domain\Entities\DiscountItem;
 use App\Discount\Domain\Services\DiscountManager;
+use Illuminate\Support\Number;
 
 class DiscountService
 {
@@ -38,7 +39,7 @@ class DiscountService
             'items' => $requestOrderDiscountData->items,
             'discounts' => $generalDiscounts,
             'total' => $total,
-            'totalWithDiscounts' => $total - ($totalOfGeneralDiscounts + $totalOfItemDiscounts)
+            'totalWithDiscounts' => Number::format($total - ($totalOfGeneralDiscounts + $totalOfItemDiscounts), 2)
         ]);
     }
 }

@@ -3,7 +3,7 @@ set -e
 
 main () {
     echo "Start entrypoint"
-    chown -R 755 /var/www/html/storage
+    #cp -n .env.example .env
     composer install
     echo "Start UnitD"
     /usr/sbin/unitd --no-daemon --control unix:/var/run/control.unit.sock

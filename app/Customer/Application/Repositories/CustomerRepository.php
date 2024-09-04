@@ -36,12 +36,12 @@ class CustomerRepository implements CustomerRepositoryInterface
      */
     public function findById(int $id): Customer
     {
-        $customer = Arr::first($this->data, static function ($value, $key) use ($id) {
+        $customer = Arr::first($this->data, static function ($value) use ($id) {
             return (int)$value['id'] === $id;
         });
 
         if ($customer === null) {
-            throw new CustomerNotFoundException();
+            throw new CustomerNotFoundException('Customer id not found');
         }
 
         return Customer::from($customer);

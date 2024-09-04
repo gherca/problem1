@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Discount\Application;
 
-
 use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Application\Services\DiscountService;
 use App\Discount\Domain\Services\DiscountManager;

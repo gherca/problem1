@@ -7,6 +7,7 @@ use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Domain\Discounts\DiscountInterface;
 use App\Discount\Domain\Entities\DiscountItem;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Number;
 
 class LoyaltyDiscount implements DiscountInterface
 {
@@ -22,7 +23,7 @@ class LoyaltyDiscount implements DiscountInterface
         $minimRevenue = Config::get('discounts.loyalty_discount_customer_minimum_revenue');
         if ($customer->revenue > $minimRevenue) {
             return DiscountItem::from([
-                'amount' => $requestOrderDiscountData->total * 0.10,
+                'amount' => Number::format($requestOrderDiscountData->total * 0.10, 2),
                 'reason' => '10% discount for customers who spent over €' . $minimRevenue
             ]);
         }
