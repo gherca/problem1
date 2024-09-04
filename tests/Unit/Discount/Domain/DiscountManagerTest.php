@@ -4,7 +4,6 @@ namespace Tests\Unit\Discount\Domain;
 
 use App\Discount\Application\Discounts\LoyaltyDiscount;
 use App\Discount\Application\DTO\RequestOrderDiscountData;
-use App\Discount\Domain\Entities\DiscountItem;
 use App\Discount\Domain\Services\DiscountManager;
 use Tests\Concerns\ExampleOrdersTrait;
 use Tests\TestCase;
