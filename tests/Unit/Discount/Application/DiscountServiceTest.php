@@ -1,21 +1,31 @@
 <?php
 
-namespace Tests\Unit\Discount;
+namespace Tests\Unit\Discount\Application;
 
 use App\Discount\Application\DTO\DiscountData;
+use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Application\Services\DiscountService;
+use App\Discount\Domain\Services\DiscountManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 
 class DiscountServiceTest extends TestCase
 {
-    #[DataProvider('providerOrders')]
-    public function test_get_discounts_return_instance_of_discount_data($data): void
+    protected function setUp(): void
     {
-        $this->assertInstanceOf(
-            DiscountData::class,
-            app(DiscountService::class)->getDiscounts(DiscountData::from($data))
+        parent::setUp();
+        $this->mockDiscountManager = $this->createMock(DiscountManager::class);
+        $this->discountService = new DiscountService($this->mockDiscountManager);
+    }
+
+    #[DataProvider('providerOrders')]
+    public function test_get_discounts_return_them_same_id($data): void
+    {
+        $this->mockDiscountManager->expects($this->once())->method('applyDiscounts')->willReturn(collect());
+        $this->assertEquals(
+            $data['id'],
+            $this->discountService->getDiscounts(RequestOrderDiscountData::from($data))->id
         );
     }
 

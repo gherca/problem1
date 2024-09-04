@@ -3,7 +3,7 @@
 namespace App\Discount\Infrastructure\Http\Controllers;
 
 use App\Common\Infrastructure\Http\Controllers\Controller;
-use App\Discount\Application\DTO\DiscountData;
+use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Application\Services\DiscountService;
 use Illuminate\Http\Response;
 
@@ -16,9 +16,9 @@ class DiscountController extends Controller
     }
 
     public function __invoke(
-        DiscountData $orderData
+        RequestOrderDiscountData $discountData
     ): Response
     {
-        return response($this->discountService->getDiscounts($orderData));
+        return response($this->discountService->getDiscounts($discountData));
     }
 }
