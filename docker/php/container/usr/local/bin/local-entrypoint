@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+main () {
+    echo "Start entrypoint"
+    chown -R 755 /var/www/html/storage
+    composer install
+    echo "Start UnitD"
+    /usr/sbin/unitd --no-daemon --control unix:/var/run/control.unit.sock
+}
+
+if [ -z "$@" ]
+then
+    main
+else
+    exec "$@"
+fi
