@@ -2,15 +2,16 @@
 
 namespace Tests\Unit\Discount\Domain;
 
-use App\Discount\Application\DTO\DiscountData;
+use App\Discount\Application\Discounts\LoyaltyDiscount;
 use App\Discount\Application\DTO\RequestOrderDiscountData;
-use App\Discount\Application\Services\DiscountService;
+use App\Discount\Domain\Entities\DiscountItem;
 use App\Discount\Domain\Services\DiscountManager;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Concerns\ExampleOrdersTrait;
 use Tests\TestCase;
 
 class DiscountManagerTest extends TestCase
 {
+    use ExampleOrdersTrait;
 
     public function test_apply_discounts_with_empty_strategies_return_empty(): void
     {
@@ -24,4 +25,27 @@ class DiscountManagerTest extends TestCase
         $this->assertEmpty($discountManager->applyDiscounts($requestOrderDiscountData));
     }
 
+    public function test_apply_discounts_loyalty_success(): void
+    {
+        $requestOrderDiscountData = RequestOrderDiscountData::from(self::order2Data());
+        $discountManager = new DiscountManager([
+            app(LoyaltyDiscount::class)
+        ]);
+
+        $this->assertTrue(
+            $discountManager
+                ->applyDiscounts($requestOrderDiscountData)
+                ->contains('amount', 2.495)
+        );
+    }
+
+    public function test_not_apply_discounts_loyalty_success(): void
+    {
+        $requestOrderDiscountData = RequestOrderDiscountData::from(self::order1Data());
+        $discountManager = new DiscountManager([
+            app(LoyaltyDiscount::class)
+        ]);
+
+        $this->assertEmpty($discountManager->applyDiscounts($requestOrderDiscountData));
+    }
 }

@@ -2,16 +2,17 @@
 
 namespace Tests\Unit\Discount\Application;
 
-use App\Discount\Application\DTO\DiscountData;
+
 use App\Discount\Application\DTO\RequestOrderDiscountData;
 use App\Discount\Application\Services\DiscountService;
 use App\Discount\Domain\Services\DiscountManager;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Tests\Concerns\ExampleOrdersTrait;
 use Tests\TestCase;
-
 
 class DiscountServiceTest extends TestCase
 {
+    use ExampleOrdersTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,34 +20,12 @@ class DiscountServiceTest extends TestCase
         $this->discountService = new DiscountService($this->mockDiscountManager);
     }
 
-    #[DataProvider('providerOrders')]
-    public function test_get_discounts_return_them_same_id($data): void
+    public function test_get_discounts_return_them_same_id(): void
     {
         $this->mockDiscountManager->expects($this->once())->method('applyDiscounts')->willReturn(collect());
         $this->assertEquals(
-            $data['id'],
-            $this->discountService->getDiscounts(RequestOrderDiscountData::from($data))->id
+            self::order1Data()['id'],
+            $this->discountService->getDiscounts(RequestOrderDiscountData::from(self::order1Data()))->id
         );
-    }
-
-    public static function providerOrders(): array
-    {
-        return [
-            [
-                [
-                    'id' => '1',
-                    'customer-id' => '2',
-                    'items' => [
-                        [
-                            'product-id' => 'B102',
-                            'quantity' => '5',
-                            'unit-price' => '4.99',
-                            'total' => '24.95'
-                        ],
-                    ],
-                    'total' => '24.95'
-                ]
-            ]
-        ];
     }
 }
