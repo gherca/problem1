@@ -37,7 +37,7 @@ class BuyMinimTwoOfCategoryGet20PercentDiscount implements DiscountInterface
             $productWithDiscount = $productsList->sortBy('unitPrice')->first();
             $productWithDiscount->discount = DiscountItem::from([
                 'amount' => Number::format($productWithDiscount->unitPrice * 0.2, 2),
-                'reason' => '20% discount on the cheapest Product'
+                'reason' => '20% discount on the cheapest Product',
             ]);
         }
 

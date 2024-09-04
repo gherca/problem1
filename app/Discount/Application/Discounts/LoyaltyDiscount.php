@@ -24,7 +24,7 @@ class LoyaltyDiscount implements DiscountInterface
         if ($customer->revenue > $minimRevenue) {
             return DiscountItem::from([
                 'amount' => Number::format($requestOrderDiscountData->total * 0.10, 2),
-                'reason' => '10% discount for customers who spent over €' . $minimRevenue
+                'reason' => '10% discount for customers who spent over €' . $minimRevenue,
             ]);
         }
 

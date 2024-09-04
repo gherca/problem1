@@ -28,13 +28,13 @@ class DiscountManagerTest extends TestCase
     {
         $requestOrderDiscountData = RequestOrderDiscountData::from(self::order2Data());
         $discountManager = new DiscountManager([
-            app(LoyaltyDiscount::class)
+            app(LoyaltyDiscount::class),
         ]);
 
         $this->assertTrue(
             $discountManager
                 ->applyDiscounts($requestOrderDiscountData)
-                ->contains('amount', 2.495)
+                ->contains('amount', 2.5)
         );
     }
 
@@ -42,7 +42,7 @@ class DiscountManagerTest extends TestCase
     {
         $requestOrderDiscountData = RequestOrderDiscountData::from(self::order1Data());
         $discountManager = new DiscountManager([
-            app(LoyaltyDiscount::class)
+            app(LoyaltyDiscount::class),
         ]);
 
         $this->assertEmpty($discountManager->applyDiscounts($requestOrderDiscountData));

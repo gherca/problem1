@@ -11,6 +11,6 @@ class CustomerRepositoryTest extends TestCase
     public function test_findById_throw_exception(): void
     {
         $this->expectException(CustomerNotFoundException::class);
-        (new CustomerRepository())->findById(999);
+        (new CustomerRepository)->findById(999);
     }
 }

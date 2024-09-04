@@ -39,7 +39,7 @@ class DiscountService
             'items' => $requestOrderDiscountData->items,
             'discounts' => $generalDiscounts,
             'total' => $total,
-            'totalWithDiscounts' => Number::format($total - ($totalOfGeneralDiscounts + $totalOfItemDiscounts), 2)
+            'totalWithDiscounts' => Number::format($total - ($totalOfGeneralDiscounts + $totalOfItemDiscounts), 2),
         ]);
     }
 }

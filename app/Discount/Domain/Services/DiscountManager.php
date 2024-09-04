@@ -25,6 +25,7 @@ class DiscountManager
             }
             $generalDiscounts->push($discount);
         }
+
         return $generalDiscounts;
     }
 }

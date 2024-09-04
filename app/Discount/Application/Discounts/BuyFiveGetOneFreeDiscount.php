@@ -28,10 +28,10 @@ class BuyFiveGetOneFreeDiscount implements DiscountInterface
 
         $productsList->each(function (RequestOrderDiscountItemData $orderItemData) {
             if ($orderItemData->quantity >= Config::get('discounts.buy_five_get_one_free_minimum_products')) {
-                ++$orderItemData->quantity;
+                $orderItemData->quantity++;
                 $orderItemData->discount = DiscountItem::from([
                     'amount' => 0,
-                    'reason' => 'Buy 5 Switches get 1 free'
+                    'reason' => 'Buy 5 Switches get 1 free',
                 ]);
             }
         });

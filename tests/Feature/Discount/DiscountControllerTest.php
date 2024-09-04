@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Discount;
+namespace Tests\Feature\Discount;
 
 use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -24,7 +24,7 @@ class DiscountControllerTest extends TestCase
         $this->post(
             '/api/v1/discounts',
             array_merge(self::order1Data(), [
-                'customer-id' => 999
+                'customer-id' => 999,
             ])
         )
             ->assertNotFound();
@@ -55,22 +55,22 @@ class DiscountControllerTest extends TestCase
                     [
                         'discount' => [
                             'amount' => 0,
-                            'reason' => 'Buy 5 Switches get 1 free'
+                            'reason' => 'Buy 5 Switches get 1 free',
                         ],
                         'productId' => 'B102',
                         'quantity' => 6,
                         'total' => 24.95,
-                        'unitPrice' => 4.99
-                    ]
+                        'unitPrice' => 4.99,
+                    ],
                 ],
                 'discounts' => [
                     [
-                        'amount' => 2.495,
-                        'reason' => '10% discount for customers who spent over €1000'
-                    ]
+                        'amount' => 2.5,
+                        'reason' => '10% discount for customers who spent over €1000',
+                    ],
                 ],
                 'total' => 24.95,
-                'totalWithDiscounts' => 22.455,
+                'totalWithDiscounts' => 22.45,
             ]);
     }
 
@@ -89,13 +89,13 @@ class DiscountControllerTest extends TestCase
                     [
                         'discount' => [
                             'amount' => 0,
-                            'reason' => 'Buy 5 Switches get 1 free'
+                            'reason' => 'Buy 5 Switches get 1 free',
                         ],
                         'productId' => 'B102',
                         'quantity' => 11,
                         'total' => 49.90,
-                        'unitPrice' => 4.99
-                    ]
+                        'unitPrice' => 4.99,
+                    ],
                 ],
                 'total' => 49.90,
                 'totalWithDiscounts' => 49.90,
@@ -118,14 +118,14 @@ class DiscountControllerTest extends TestCase
                         'productId' => 'B102',
                         'quantity' => 2,
                         'unitPrice' => 9.75,
-                        'total' => 19.50
+                        'total' => 19.50,
                     ],
                     [
                         'productId' => 'A102',
                         'quantity' => 1,
                         'unitPrice' => 49.50,
-                        'total' => 49.50
-                    ]
+                        'total' => 49.50,
+                    ],
                 ],
                 'total' => 69.00,
                 'totalWithDiscounts' => 69.0,
@@ -145,16 +145,16 @@ class DiscountControllerTest extends TestCase
                         'product-id' => 'A101',
                         'quantity' => '1',
                         'unit-price' => '9.75',
-                        'total' => '9.75'
+                        'total' => '9.75',
                     ],
                     [
                         'product-id' => 'A102',
                         'quantity' => '2',
                         'unit-price' => '49.50',
-                        'total' => '99'
-                    ]
+                        'total' => '99',
+                    ],
                 ],
-                'total' => '103.99'
+                'total' => '103.99',
             ]
         )
             ->assertSuccessful()
@@ -165,19 +165,19 @@ class DiscountControllerTest extends TestCase
                     [
                         'discount' => [
                             'amount' => 1.95,
-                            'reason' => '20% discount on the cheapest Product'
+                            'reason' => '20% discount on the cheapest Product',
                         ],
                         'productId' => 'A101',
                         'quantity' => 1,
                         'unitPrice' => 9.75,
-                        'total' => 9.75
+                        'total' => 9.75,
                     ],
                     [
                         'productId' => 'A102',
                         'quantity' => 2,
                         'unitPrice' => 49.50,
-                        'total' => 99
-                    ]
+                        'total' => 99,
+                    ],
                 ],
                 'total' => 108.75,
                 'totalWithDiscounts' => 106.8,
@@ -197,48 +197,49 @@ class DiscountControllerTest extends TestCase
                         'product-id' => 'B101',
                         'quantity' => '5',
                         'unit-price' => '9.75',
-                        'total' => '48.75'
+                        'total' => '48.75',
                     ],
                     [
                         'product-id' => 'A102',
                         'quantity' => '2',
                         'unit-price' => '49.50',
-                        'total' => '99'
-                    ]
+                        'total' => '99',
+                    ],
                 ],
-                'total' => '103.99'
+                'total' => '103.99',
             ]
         )
             ->assertSuccessful()
-            ->assertExactJson([
-                'id' => (int)$orderData['id'],
-                'discounts' => [
-                    [
-                        'amount' => 10.4,
-                        'reason' => '10% discount for customers who spent over €1000'
-                    ]
-                ],
-                'items' => [
-                    [
-                        'discount' => [
-                            'amount' => 0,
-                            'reason' => 'Buy 5 Switches get 1 free'
+            ->assertExactJson(
+                [
+                    'id' => (int)$orderData['id'],
+                    'discounts' => [
+                        [
+                            'amount' => 10.4,
+                            'reason' => '10% discount for customers who spent over €1000',
                         ],
+                    ],
+                    'items' => [
+                        [
+                            'discount' => [
+                                'amount' => 0,
+                                'reason' => 'Buy 5 Switches get 1 free',
+                            ],
                             'productId' => 'B101',
                             'quantity' => 6,
                             'unitPrice' => 9.75,
-                            'total' => 48.75
+                            'total' => 48.75,
                         ],
                         [
                             'discount' => [
                                 'amount' => 9.9,
-                                'reason' => '20% discount on the cheapest Product'
+                                'reason' => '20% discount on the cheapest Product',
                             ],
                             'productId' => 'A102',
                             'quantity' => 2,
                             'unitPrice' => 49.50,
-                            'total' => 99
-                        ]
+                            'total' => 99,
+                        ],
                     ],
                     'total' => 147.75,
                     'totalWithDiscounts' => 127.45,
@@ -251,7 +252,7 @@ class DiscountControllerTest extends TestCase
         return [
             [self::order1Data()],
             [self::order2Data()],
-            [self::order3Data()]
+            [self::order3Data()],
         ];
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Customer\Application\Exceptions;
 
-class CustomerNotFoundException extends \Exception
-{
+use Exception;
 
+class CustomerNotFoundException extends Exception
+{
 }
