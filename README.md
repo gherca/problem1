@@ -1,66 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel API with DDD Architecture and Docker Integration
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Introduction
 
-## About Laravel
+This project is a Laravel-based API built following Domain-Driven Design (DDD) principles. It utilizes Docker for seamless environment setup, and the API can be started by simply running `docker-compose up -d`. The system has been structured at the domain level, with entities such as `Customer`, `Discount`, and `Product`. The API contains various layers including Application, Domain, and Infrastructure.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Domain-Driven Design**: Structured around different domains like Customer, Discount, and Product.
+- **Docker Support**: Easily set up and run the project using Docker.
+- **Laravel**: Built using Laravel as the framework.
+- **REST API**: Includes endpoints for managing business logic, such as applying discounts.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Project Structure
 
-## Learning Laravel
+The project follows the DDD pattern and has the following key components:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+├── app/
+│   ├── Customer/
+│       └── Application
+│           ├── Exceptions
+│           └── Repositories
+│       └── Domain
+│           ├── Entities
+│           └── Repositories
+│   ├── Discount/
+│       └── Application
+│           ├── Discounts
+│           ├── DTO
+│           └── Services
+│       └── Domain
+│           ├── Discounts
+│           ├── Entities
+│           └── Services
+│   ├── Product/
+│       └── Application
+│           └── Repositories
+│       └── Domain
+│           ├── Entities
+│           └── Repositories
+│   └── Common/
+│       └── Infrastructure/
+│           ├── Http/
+│           │   └── Controllers/      # Laravel controllers
+│           └── Providers/            # Laravel service providers
+```
+## Installation
+1. Clone the repository
+```
+git clone https://github.com/gherca/problem1.git
+```
+2. Stat the application using Docker
+```
+docker-compose up -d
+```
+That’s it! The Docker environment is configured with an entrypoint that handles the following tasks automatically:
+- Copies .env.example to .env.
+- Runs composer install to install PHP dependencies.
+- Starts the server using Nginx Unit.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Usage
+### API Endpoint
+- **POST /api/v1/discounts**
+- Request Body
+```
+{
+  "id": "2",
+  "customer-id": "2",
+  "items": [
+    {
+      "product-id": "B102",
+      "quantity": "5",
+      "unit-price": "4.99",
+      "total": "24.95"
+    }
+  ],
+  "total": "24.95"
+}
+```
+- Response  **200 OK**
+```
+{
+    "id": 2,
+    "items": [
+        {
+            "productId": "B102",
+            "quantity": 6,
+            "unitPrice": 4.99,
+            "total": 24.95,
+            "discount": {
+                "amount": 0,
+                "reason": "Buy 5 Switches get 1 free"
+            }
+        }
+    ],
+    "discounts": [
+        {
+            "amount": 2.5,
+            "reason": "10% discount for customers who spent over €1000"
+        }
+    ],
+    "total": 24.95,
+    "totalWithDiscounts": 22.45
+}
+```
+- Response **422 Unprocessable Entity**
+```
+{
+    "message": "The id field is required.",
+    "errors": {
+        "id": [
+            "The id field is required."
+        ]
+    }
+}
+```
+- Response **404 Not Found**
+```
+{
+    "message": "Customer id not found"
+}
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Business Logic
 
-## Laravel Sponsors
+The discount system in this project is structured with two levels of discounts:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. **Item-Level Discounts**: Applied to specific items.
+2. **General Discounts**: Applied to the entire order based on customer history.
 
-### Premium Partners
+### Discount Types
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+The system implements three types of discounts:
 
-## Contributing
+1. **Customer-Level Discount**:
+    - **Condition**: A customer who has already spent over €1000 in previous purchases.
+    - **Discount**: Gets a 10% discount on the whole order.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   Example: If a customer has spent more than €1000 in total before placing the current order, they will receive a 10% discount on their entire order.
 
-## Code of Conduct
+2. **Category-Level Discount (Switches)**:
+    - **Condition**: For every five products purchased from the category "Switches" (category ID: `2`).
+    - **Discount**: The customer receives a sixth product for free.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Example: If a customer adds six products from the "Switches" category to the cart, they will only pay for five of them.
 
-## Security Vulnerabilities
+3. **Category-Level Discount (Tools)**:
+    - **Condition**: When purchasing two or more products from the category "Tools" (category ID: `1`).
+    - **Discount**: A 20% discount is applied to the cheapest product.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   Example: If a customer buys two or more products from the "Tools" category, the cheapest item will have a 20% discount applied to it.
 
-## License
+### Applying Discounts
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The system checks the order and applies applicable discounts automatically. Discounts can be combined, and multiple rules can apply depending on the customer's order details and purchase history.
